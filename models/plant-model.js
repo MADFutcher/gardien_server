@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const plantSchema = new Schema(
   {
-    Name: {
+    name: {
       type: String,
       required: [true, "Name is required."],
     },

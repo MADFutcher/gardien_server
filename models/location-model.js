@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const locationSchema = new Schema(
   {
-    Name: {
+    name: {
       type: String,
       required: [true, "Name is required."],
     },
@@ -18,6 +18,17 @@ const locationSchema = new Schema(
           "Please chose from one of the following: Indoor, Outdoor",
       },
       required: true,
+    },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
     },
     plants:[{ type: Schema.Types.ObjectId, ref: "Plant" }],
     user:{ type: Schema.Types.ObjectId, ref: "User" }
