@@ -17,8 +17,8 @@ const cron         = require('node-cron')
 //   console.log('running a task 5 seconds');
 // });
 
-cron.schedule('0 0 */1 * *', () => {
-  console.log('running a task every 1 days');
+cron.schedule('0 0 0 */1 * *', () => {
+  console.log('running a task every 1 day');
 });
 
 
