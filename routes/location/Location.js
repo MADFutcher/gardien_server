@@ -3,6 +3,30 @@ const locationRoutes = express.Router();
 const User = require("../../models/user-model");
 const Location = require("../../models/location-model");
 
+
+
+locationRoutes.get("/:userId/locations/:locationId", (req, res, next) => {
+  const { userId, locationId } = req.params;
+  User.findOne({_id:userId}, "-password -plants")
+    .populate({
+      path: "locations",
+      match:{_id: locationId},
+      populate: { path: "plants" },
+    })
+    .then((locResults) => {
+      if (locResults) {
+        if (locResults.locations.length > 0) {
+          res.status(200).json({ data: locResults });
+        } else {
+          res.status(500).json({ data: "Specified Location not Found" });
+        }
+      } else {
+        res.status(500).json({ data: "Specified User not Found" });
+      }
+    })
+    .catch((err) => res.status(500).json({ data: err }));
+});
+
 //get all Locations
 locationRoutes.get("/:userId/locations", (req, res, next) => {
   const { userId } = req.params;
@@ -19,28 +43,7 @@ locationRoutes.get("/:userId/locations", (req, res, next) => {
     .catch((err) => res.status(500).json({ data: err }));
 });
 
-locationRoutes.get("/:userId/locations/:locationId", (req, res, next) => {
-  const { userId, locationId } = req.params;
-  User.findById(userId, "-password -plants")
-    .populate({
-      path: "locations",
-      $select: null,
-      $match: { _id: locationId },
-      populate: { path: "plants" },
-    })
-    .then((locResults) => {
-      if (locResults) {
-        if (locResults.locations.length > 0) {
-          res.status(200).json({ data: locResults });
-        } else {
-          res.status(500).json({ data: "Specified Location not Found" });
-        }
-      } else {
-        res.status(500).json({ data: "Specified User not Found" });
-      }
-    })
-    .catch((err) => res.status(500).json({ data: err }));
-});
+
 
 locationRoutes.post("/:userId/locations/newlocation", (req, res, next) => {
   console.log(req.body);
