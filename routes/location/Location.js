@@ -65,7 +65,7 @@ locationRoutes.post("/:userId/locations/newlocation", (req, res, next) => {
           )
             .populate("locations")
             .then((userUpdated) => {
-              res.status(200).json({ data: userUpdated });
+              res.status(200).json({ data: userUpdated, newLocationId:newLoc._id });
             });
         });
       } else {
