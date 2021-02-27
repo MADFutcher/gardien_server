@@ -26,7 +26,7 @@ require('./configs/passport');
 
 
 mongoose
-  .connect('mongodb://localhost/gardien-server', {useNewUrlParser: true})
+  .connect('mongodb+srv://admin:NeQvtFxgFhp3s6d@gardien0.3qhr6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
