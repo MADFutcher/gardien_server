@@ -14,10 +14,5 @@ userRoutes.get('/:_id', (req,res,next)=>{
 })
 
 
-userRoutes.post("/:_id",(req,res,next)=>{
-  const {locations,plants,username,email,picture} = req.body
-
-})
-
 
 module.exports = userRoutes;
