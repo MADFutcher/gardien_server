@@ -26,7 +26,7 @@ require('./configs/passport');
 
 
 mongoose
-  .connect('mongodb+srv://admin:NeQvtFxgFhp3s6d@gardien0.3qhr6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true})
+  .connect(process.env.MONGO_URL, {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -50,7 +50,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:5000']
+    origin: [process.env.CORS_ALLOWED]
   })
 );
 
