@@ -19,6 +19,10 @@ const locationSchema = new Schema(
       },
       required: true,
     },
+    address:{
+      type: String,
+      required: [true, "Address is required."],
+    },
     location: {
       type: {
         type: String,

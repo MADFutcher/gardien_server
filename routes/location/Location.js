@@ -47,7 +47,7 @@ locationRoutes.get("/:userId/locations", (req, res, next) => {
 
 locationRoutes.post("/:userId/locations/newlocation", (req, res, next) => {
   console.log(req.body);
-  const { name, type, lat, lng } = req.body;
+  const { name, type, address, lat, lng } = req.body;
   const { userId } = req.params;
   User.findById(userId, "-password")
     .then((user) => {
@@ -55,6 +55,7 @@ locationRoutes.post("/:userId/locations/newlocation", (req, res, next) => {
         Location.create({
           name,
           type,
+          address,
           location: {
             type: "Point",
             coordinates: [lat, lng],
@@ -67,6 +68,7 @@ locationRoutes.post("/:userId/locations/newlocation", (req, res, next) => {
             { new: true }
           )
             .populate("locations")
+            .populate("plants")
             .then((userUpdated) => {
               res.status(200).json({ data: userUpdated, newLocationId:newLoc._id });
             });
