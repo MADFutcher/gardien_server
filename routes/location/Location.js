@@ -2,7 +2,7 @@ const express = require("express");
 const locationRoutes = express.Router();
 const User = require("../../models/user-model");
 const Location = require("../../models/location-model");
-
+const Plant = require("../../models/plant-model")
 
 
 locationRoutes.get("/:userId/locations/:locationId", (req, res, next) => {
@@ -92,6 +92,42 @@ locationRoutes.post("/:userId/locations/:locationId", (req,res,next)=>{
                     res.status(200).json({data:updatedLocation})
                   })
 
+        }
+      })
+      .catch(err=>res.status(500).json({data:err}))
+})
+
+
+locationRoutes.get("/:userId/locations/:locationId/delete", (req,res,next)=>{
+  console.log('delete')
+  const {userId,locationId} = req.params
+  User.findById(userId,"-password")
+      .then(user=>{
+        if(user){
+          console.log(user)
+          User.findByIdAndUpdate(userId,{$pull:{locations:locationId}})
+              .then(()=>{
+                      Plant.find({location: locationId})
+                      .then((plants)=>{
+                          const plantIds = plants.map(plant=>{
+                            return plant._id
+                          })
+                          console.log(plantIds)
+                          Plant.deleteMany({location:locationId})
+                               .then(()=>{
+                                  User.findByIdAndUpdate(userId,{$pull:{plants:{$in:plantIds}}},{ new: true })
+                                      .then((userInfo)=>{
+                                        console.log(userInfo)
+                                         Location.findByIdAndDelete(locationId)
+                                                 .then(res.status(200).json({data:null}))
+                                      })
+                                })
+
+
+                          
+                         
+                      })
+              })
         }
       })
       .catch(err=>res.status(500).json({data:err}))
