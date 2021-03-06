@@ -122,10 +122,6 @@ locationRoutes.get("/:userId/locations/:locationId/delete", (req,res,next)=>{
                                                  .then(res.status(200).json({data:null}))
                                       })
                                 })
-
-
-                          
-                         
                       })
               })
         }
