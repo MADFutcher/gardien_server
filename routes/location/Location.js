@@ -80,4 +80,21 @@ locationRoutes.post("/:userId/locations/newlocation", (req, res, next) => {
     .catch((err) => res.status(500).json({ data: err }));
 });
 
+
+locationRoutes.post("/:userId/locations/:locationId", (req,res,next)=>{
+  const {userId,locationId} = req.params
+  const { name, type, address, lat, lng } = req.body;
+  User.findById(userId, "-password")
+      .then(user=>{
+        if(user){
+          Location.findByIdAndUpdate(locationId,{name, type, address, $set:{location:{coordinates:[lat,lng]}}},{ new: true })
+                  .then(updatedLocation=>{
+                    res.status(200).json({data:updatedLocation})
+                  })
+
+        }
+      })
+      .catch(err=>res.status(500).json({data:err}))
+})
+
 module.exports = locationRoutes;
