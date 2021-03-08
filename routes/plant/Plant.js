@@ -19,6 +19,8 @@ plantRoutes.post('/:userId/plants/:plantId', (req,res,next)=>{
                .then((plant)=>{
                  res.status(200).json({data:plant})
                })
+          }else{
+            res.status(500).json({data:'User Doesnt Exist'})
           }
       })
       .catch(err=>res.send(500).json({data:err}))
@@ -45,6 +47,26 @@ plantRoutes.post('/:userId/locations/:locationId/plants/new', (req,res,next)=>{
                         })
                   )
                   
+      })
+      .catch(err=>res.status(500).json({data:err}))
+})
+
+plantRoutes.get('/:userId/plants/:plantId/delete', (req,res,next)=>{
+  console.log('here')
+  const {userId, plantId}=req.params
+  User.findById(userId)
+      .then(user=>{
+        if(user){
+          Plant.deleteOne({_id: plantId})
+              .then(() => {Location.findOneAndUpdate({plants:plantId}, {$pull:{plants:plantId}})
+                            .then(()=>{
+                              User.findByIdAndUpdate(userId, {$pull:{plants:plantId}})
+                                  .then(user => {res.status(200).json({data:user})})
+                            })
+              })     
+        }else{
+          res.status(500).json({data:'User Doesnt Exist'})
+        }
       })
       .catch(err=>res.status(500).json({data:err}))
 })
