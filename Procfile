@@ -1,1 +1,1 @@
-clock:  node schedule.js
+clock: node schedule.js
