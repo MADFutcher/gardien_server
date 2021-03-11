@@ -13,9 +13,9 @@ const cors         = require('cors')
 const passport     = require('passport')
 const cron         = require('node-cron')
  
-// cron.schedule('*/5 * * * * *', () => {
-//   console.log('running a task 5 seconds');
-// });
+cron.schedule('0 0 0 * * *', () => {
+  console.log('Runs everyday @ midnight');
+});
 
 cron.schedule('0 0 0 */1 * *', () => {
   console.log('running a task every 1 day');
